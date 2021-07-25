@@ -34,7 +34,10 @@ app.get('/', (req, res) => {
 //post request
 app.post('/', async (req, res) => {
   let errors = [];
-  const { mainUrl, currentUrl, customUrl } = req.body;
+  let { mainUrl, currentUrl, customUrl } = req.body;
+
+  if (!customUrl) customUrl = makeid(6);
+
   const CUrlCount = await URLS.findOne({
     customUrl: customUrl,
   }).countDocuments();
@@ -81,3 +84,15 @@ app.get('/:customUrl', async (req, res) => {
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`server is running on port ${port}`));
+
+// random string
+function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
